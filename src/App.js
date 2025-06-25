@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // Replace this with an actual TooltipProvider or remove if not using one
 // Local pages (make sure these files exist in ./pages/)
 import Settings from "./components/Settings";
-import Dashboard from "./components/Dashboard.tsx";
+import Dashboard from "./components/Dashboard.js";
 import Repositories from "./components/Repositories.js";
 import Integrations from "./components/Integrations.js";
 import Reports from "./components/Reports.js";

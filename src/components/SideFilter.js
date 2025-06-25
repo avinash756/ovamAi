@@ -10,6 +10,7 @@ import {
 import { MdDashboard } from "react-icons/md";
 import { IoIosGift } from "react-icons/io";
 import { BiLayer } from "react-icons/bi";
+import { FaCreditCard } from "react-icons/fa6";
 
 import Dropdown from "./DropDown";
 
@@ -54,6 +55,7 @@ const SideFilter = () => {
         <Dropdown />
 
         <Link to="/subscription" className={linkClass("/subscription")}>
+        <FaCreditCard size={16}/>
           Subscription
         </Link>
 
