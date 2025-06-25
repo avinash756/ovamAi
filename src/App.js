@@ -12,6 +12,7 @@ import Reports from "./components/Reports.js";
 import Login from "./components/Login.js";
 import SubscriptionPage from "./components/SubscriptionPage.js";
 import OrganizationSettings from "./components/OrganizationSettings.js";
+import ApiKeys from "./components/ApiKey.js";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => (
         />
         <Route path="/login" element={<Login />} />
         <Route path="/reports" element={<Reports />} />
+        <Route path="/apiKey" element={<ApiKeys />} />
         <Route path="/subscription" element={<SubscriptionPage />} />
       </Routes>
     </BrowserRouter>
