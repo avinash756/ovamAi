@@ -1,12 +1,22 @@
-import React, { useState } from "react";
-import "../App.css";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom"; // ✅ for navigation
+import "../index.css";
 import { FaGithub, FaGitlab, FaBitbucket, FaCloud } from "react-icons/fa";
 
-function Login() {
+function SignupPage() {
   const [activeTab, setActiveTab] = useState("saas");
+  const history = useHistory();
+
+  // ✅ Redirect to dashboard if already logged in
+  useEffect(() => {
+    const token = localStorage.getItem("ovamToken");
+    if (token) {
+      history.push("/");
+    }
+  }, [history]);
 
   const handleLogin = (provider) => {
-    window.location.href = `http://localhost:5000/auth/${provider}`;
+    window.location.href = `http://localhost:5000/auth/${provider}?prompt=login`;
   };
 
   return (
@@ -15,8 +25,7 @@ function Login() {
       <h1 className="title">ovam ai</h1>
       <h2 className="subtitle">Welcome to ovam ai</h2>
       <p className="description">
-        Get a 14-day free trial for your entire team by signing up with your Git
-        provider.
+        Get a 14-day free trial for your entire team by signing up with your Git provider.
       </p>
 
       <div className="tab-container">
@@ -50,11 +59,10 @@ function Login() {
       </div>
 
       <p className="footer">
-        By continuing, you agree to the <a href="/terms">Terms of Use</a> and{" "}
-        <a href="/privacy">Privacy Policy</a> applicable to CodeRabbit.
+        By continuing, you agree to the <a href="/terms">Terms of Use</a> and <a href="/privacy">Privacy Policy</a> applicable to CodeRabbit.
       </p>
     </div>
   );
 }
 
-export default Login;
+export default SignupPage;

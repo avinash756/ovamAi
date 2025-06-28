@@ -1,39 +1,68 @@
-import { Toaster } from "sonner"; // Sonner toaster (corrected import)
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"; // Fixed missing provider import
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Toaster } from "sonner";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Switch } from "react-router-dom";
 
-// Replace this with an actual TooltipProvider or remove if not using one
-// Local pages (make sure these files exist in ./pages/)
+// Local pages
+// import PrivateRoute from "./components/PrivateRoute";
+
 import Settings from "./components/Settings";
-import Dashboard from "./components/Dashboard.js";
-import Repositories from "./components/Repositories.js";
-import Integrations from "./components/Integrations.js";
-import Reports from "./components/Reports.js";
-import Login from "./components/Login.js";
-import SubscriptionPage from "./components/SubscriptionPage.js";
-import OrganizationSettings from "./components/OrganizationSettings.js";
-import ApiKeys from "./components/ApiKey.js";
+import Dashboard from "./components/Dashboard";
+import Repositories from "./components/Repositories";
+import Integrations from "./components/Integrations";
+import Reports from "./components/Reports";
+import Login from "./components/Login";
+import SubscriptionPage from "./components/SubscriptionPage";
+import OrganizationSettings from "./components/OrganizationSettings";
+import ApiKeys from "./components/ApiKey";
+import PrivateRoute from "./components/PrivateRoute";
+import { Route, useLocation } from "react-router-dom/cjs/react-router-dom.min";
+import { useEffect } from "react";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const queryClient = new QueryClient();
+
+const AppRoutes = () => {
+  const history = useHistory();
+  const location = useLocation();
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const jwtToken = queryParams.get("token");
+    const accessToken = queryParams.get("accessToken");
+    const provider = queryParams.get("provider");
+
+    if (jwtToken && accessToken && provider) {
+      localStorage.setItem("ovamToken", jwtToken); // JWT for your backend
+      localStorage.setItem("oauthToken", accessToken); // OAuth token for GitHub API
+      localStorage.setItem("oauthProvider", provider);
+
+      history.replace("/");
+    }
+  }, [location, history]);
+
+  return (
+    <Switch>
+      <PrivateRoute exact path="/" component={Dashboard} />
+      <PrivateRoute path="/settings" component={Settings} />
+      <PrivateRoute path="/repositories" component={Repositories} />
+      <PrivateRoute path="/integrations" component={Integrations} />
+      <PrivateRoute
+        path="/organizationSettingConfig"
+        component={OrganizationSettings}
+      />
+      <PrivateRoute path="/reports" component={Reports} />
+      <PrivateRoute path="/apiKey" component={ApiKeys} />
+      <PrivateRoute path="/subscription" component={SubscriptionPage} />
+      <Route path="/login" component={Login} />
+    </Switch>
+  );
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <Toaster richColors closeButton position="top-right" />
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/repositories" element={<Repositories />} />
-        <Route path="/integrations" element={<Integrations />} />
-        <Route
-          path="/organizationSettingConfig"
-          element={<OrganizationSettings />}
-        />
-        <Route path="/login" element={<Login />} />
-        <Route path="/reports" element={<Reports />} />
-        <Route path="/apiKey" element={<ApiKeys />} />
-        <Route path="/subscription" element={<SubscriptionPage />} />
-      </Routes>
+      <AppRoutes />
     </BrowserRouter>
   </QueryClientProvider>
 );
